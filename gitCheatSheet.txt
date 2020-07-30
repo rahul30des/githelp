@@ -203,7 +203,7 @@ IX  GIT REMOTE FETCH/PULL
 
 
 Git remote // Remote server information (github/bitbucket)
-Git remote set -url origin git@github.com:name/repo.git // For code already tracked
+Git remote set-url origin git@github.com:name/repo.git // For code already tracked
 git remote add origin url // For code not already tracked
 Git branch -r %%List Remote Branches
 Git fetch %% Sync remotes respos to local system
