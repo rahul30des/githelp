@@ -1,0 +1,285 @@
+==============
+I  GIT HISTORY
+==============
+
+
+	1. SCCS - Initial popular version bundled with UNIX
+	2. RCS - Keeps current version in totality and applies deltas as we move backward in history. Hence faster for everyday usage. Multi-OS
+	3. CVS - Tracks more than one file at a time
+	4. SVN - Can track different file formats not just text files and also directories
+	5. BitKeeperSCM - Main version was proprietary while community version was free. The latter was used to save Linux Kernel changes.
+       Once the free version closed down, Linus Torvalds wrote GIT which is supposed to be even better.
+	6. GIT - Distributed version control, change sets exchanged across each version of the repo
+
+Git config -
+
+System Level - etc/gitconfig
+Git config --system
+
+User Level - ~/.gitconfig
+Git config --global
+
+Eg - git config --global user.name "John Doe"
+git config --global user.email "abc@xyz.com"
+git config --global color.ui true
+Git config --list
+cat ~/.gitconfig
+Git config --global core.editor "vim -w"
+
+Project level - project/.git/config
+Git  config
+
+GIT Man
+
+Git help log
+Man git-log
+
+Initializing  your GIT Repo
+
+Git init // .git folder created with config file, HEAD (=>refs/heads/master), remotes/origin/master
+Make changes // Working Directory
+git add .  (or individual files), git commit -m "Message" %% Make changes, add changes // Put on Staging Index
+commit them // Commit  change set from staging index to Local Repo
+
+git add -A stages all changes
+git add . stages new files and modifications without deletions
+git add -u stages modifications and deletions without new files
+
+
+==============
+II  GIT RESET
+==============
+
+
+	- Moves HEAD pointer
+	- Soft reset  - Only moves the repo, does not change staging index or working directory
+	Git reset --soft <branch>
+
+	- Mixed (Default) - Changes staging index to match repository, does not change working directory
+	- Hard - Changes staging index and working directory to match repository
+	Git reset --hard <tag>
+
+	Workflow
+
+    Working directory, Staging Index and Local Repo, followed by push to remote repo
+	Git commit generates a SHA-1 checksum for the changeset. Along with the checksum the following meta is also stored
+    with each commit - parent (commit before this commit), author and commit message.
+
+	HEAD is a reference variable or pointer that points to the tip of our current branch (i.e. the last commit). It can be moved around (eg - when we checkout a different branch,
+    HEAD moves to the tip of that branch)
+
+	Cat .git/HEAD %% refs/head/master
+	Cat ./git/refs/head/master %% 123456 (commit ID of tip of branch)
+	Git status %% difference betweenn your working directory, staging index and repo
+	Git reset HEAD filename %% To un-stage your staged changes
+	Git diff %% Difference between repo and working directory
+	Git diff --staged %% Difference between staging index and local repo, this command was previously known as git diff --cached
+	Git rm filename %% Add file (marked for deletion) to staging index
+	Git mv old_file_name new_file_name %% Rename the file and add this change to staging index
+	Git checkout filename or git checkout -- filename %% in case filename and reponame is the same
+	Git commit --amend -m "message" %% Amend previous commit
+    Git checkout COMMITID -- filename %% Move to previous version of the file, it puts it directly into staging area
+
+
+==========================
+III  GIT CLEAN/GIT IGNORE
+==========================
+
+
+Git clean -f  %% Cleans all untracked files, including changes to working directory
+.gitignore %% Usually in the project directory, if not create and commit, add all files to be ignored by git to this list, can also use regex
+
+Git will NOT ignore already tracked files even if you add the file to .gitignore
+
+To stop tracking changes to a file in a repo, do 'git rm --cached filename'. This removes the file from the staging index.
+
+Git tracks files and therefore the directories they are in. Git does not track empty directories, hence cheat is to touch some file (say .gitkeep) in an otherwise empty directory to make git track the directory.
+
+
+==========================
+IV  GIT TREE
+==========================
+
+
+Parent commit (use ^ or ~ for ancestory)
+
+HEAD^ or HEAD~ or HEAD~1
+master^ or master~
+02380234^ or 02380234~
+
+GrandParent commit (use ^ or ~ for ancestory)
+
+HEAD^^ or HEAD~~ or HEAD~2
+
+List out a Tree
+
+Git ls-tree branch
+Git ls-tree branch path
+Git ls-tree branch^ folder
+Git ls-tree commit
+
+
+==========================
+V  GIT LOG
+==========================
+
+
+Searching between range of commits
+
+Git log (equivalent to saying git log HEAD), git log -2 (Returns list of last 2 commits)
+Git log --since=2012-06-15, Git log --until=2012-06-15
+Git log --since="2 weeks ago" --until="3 days ago"
+git log --pretty=format:"%ad - %an: %s" --after="2016-01-31" --until="2017-03-10" --author="rdeshpande"
+Git log --author="rdeshpande"
+Git log --grep="ssm"
+Git log commitid_old..commitid_new %% List all the commitIDs between this range
+Git log -p commitid_old..commitid_new %% List all the commits (as well as changesets) between this range
+Git log --graph -all -decorate %% Visual representation
+Git show <commitID>, git show HEAD^, git show HEAD~2
+
+Git log -p oldcommitID.. <filename>
+Git log --stat --sumary
+Git log  --oneline --graph --all --decorate
+
+
+==========================
+VI  GIT DIFF
+==========================
+
+
+Git diff commitd %% Diff between now and then
+Git diff commitID1..commitID2 %% Diff between those two commits
+Git diff  branch1..branch2 %% Diff between these two branches
+Git diff --color-words branch1..branch2^
+
+
+==========================
+VII  GIT BRANCH
+==========================
+
+
+One working directory, fast context switching
+
+Git clone URL %% Clone a Repo
+git branch <branchname> %% Creates a branch with the branchname
+Git  branch %% Lists all branches
+Git checkout -b <branchname> <tag> %% Creates branch with name and checks out
+Git push -u origin branchname %%Creates remote branch and pushes from local to remote
+Git branch --merged %% List of all branches that are completely merged in this branch
+Git branch -m old_branch_name new_branch_name %% Old name and New name
+Git branch -d branch_name %% Delete branch
+// GIT checks if it is on the same branch before deleting and also if deleted branch has some changes that havent been merged to current branch. To forcefully delete inspite of any missing commits to current branch use -D
+Git tag <tag> % Apply tag locally
+Git push origin <tag> % Push to remote
+Git tag -l %% List all tags
+Git push --delete origin tagname % Delete remote tag
+If you also need to delete the local tag, use:
+
+Git tag --delete tagname
+
+
+==========================
+VIII  GIT STASH
+==========================
+
+
+Stash is a fourth area which stores snapshots of temporary changes (no SHAs associated)
+Git stash
+Git stash save "feature change"
+Git stash list
+Git stash show stash@{0}
+Git stash show -p stash@{0}
+Git stash pop %% Applies the topmost change and deletes it from stash
+Git stash pop stash@{2}
+Git stash apply  %% Applies the topmost change and keeps it in the stash
+Git stash apply stash@{0}
+Git stash drop stash@{0} %% Deletes the change from the stash
+Git stash clear %% Clears out your whole stash
+
+
+==========================
+IX  GIT REMOTE FETCH/PULL
+==========================
+
+
+Git remote // Remote server information (github/bitbucket)
+Git remote set -url origin git@github.com:name/repo.git // For code already tracked
+git remote add origin url // For code not already tracked
+Git branch -r %%List Remote Branches
+Git fetch %% Sync remotes respos to local system
+Git merge origin/branch %% Do this frequently
+Fetch before you work, fetch before you push, fetch often then git merge origin/branch
+git pull  origin master %% git fetch+git merge in one step
+Git pull;git submodule update %% Update all required submodules. Failsafe way if there are no hooks
+Git branch tracking origin/tracking %% Crates a branch and sets up the tracking branch at the same time
+Git push -u origin tracking // Creates tracking and pushes upstream
+%%Or use set up stream if you have missed doing this in the beginning
+Git branch --set-upstream-to origin/branch
+Git branch -u origin/branch
+Git push origin --delete branch_name
+
+Git pull // git fetch + git merge
+
+Git checkout -b branch origin/branch // For checking out local version of existing remote branch
+
+
+==========================
+X  GIT SQUASH
+==========================
+
+
+Git rebase -I origin/branch~n branch
+Git push origin +branch
+Git push origin branch -f
+
+Git diff master >& temp.diff
+Git apply --whitespace=nowarn temp.diff
+
+
+===========================
+XI  GIT CONFLICT RESOLUTION
+===========================
+
+
+Git rebase origin/branch
+Git mergetool
+Git rebase --continue
+Git rebase --abort
+Git rebase -i master -s recursive -X theirs
+Git commit --amend
+
+
+There is no way that merge (or rebase) can work without touching the working directory (and index), as there can be merge conflicts that have to be resolved using working directory (and/or index).
+
+Git merge branch %% Merge branch into current
+Fast-Forward merge is when it finds that the changes can be directly merged on top of your current changes i.e. your HEAD hasn't moved since the branch that is being merged was initially branched off. So a new commit is not made in this case. If fast forward merge is disabled then a new commit HAS to be made.
+
+// Merge happens in the receiver branch, always checkout the branch the merge is being received into before issuing the merge
+
+Use 'git mergetool --tool=vimdiff %% For using a specific tool for merging
+Search for <<< when resolving conflicts
+Merge master often into your branch to avoid merging problems later
+
+
+
+Reset vs Rebase vs Checkout
+--------------------------------------
+
+https://gist.github.com/mislav/5147811
+
+Basically rebase works on commits and rewrites history. Should not be used when changes have been remotely published and remote branch is being shared w/ others.
+
+Reset - is similar but there are options to keep staging and working directory changes
+
+Checkout - switches branches, used to get specific version of file using tree-ish options
+
+
+==========================
+XII  GIT SUBMODULE
+==========================
+
+
+Git submodule update --init --recursive --jobs n
+
+https://www.philosophicalhacker.com/post/using-git-submodules-effectively/
+https://www.vogella.com/tutorials/GitSubmodules/article.html
