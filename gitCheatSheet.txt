@@ -29,6 +29,8 @@ Git config --global core.editor "vim -w"
 Project level - project/.git/config
 Git  config
 
+GIT_SSH_COMMAND='ssh -i ~/.ssh/rahul_id_rsa' // Set this env variable to use a non-system default SSH key-pair
+
 GIT Man
 
 Git help log
