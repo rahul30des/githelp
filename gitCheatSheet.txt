@@ -285,3 +285,18 @@ Git submodule update --init --recursive --jobs n
 
 https://www.philosophicalhacker.com/post/using-git-submodules-effectively/
 https://www.vogella.com/tutorials/GitSubmodules/article.html
+
+Git clone --recursive-submodules // Clone project  with submodules
+Git submodule update --init --recursive
+
+// Update submodules to latest code after some time
+Git submodules update --remote
+
+// Fetch and Mege frm a different remote branch
+Git sobmodule update --remote <branch>
+
+// Update Repo settings to fetch and merge from a different branch
+Git config -f .gitmodules submodule.<submodule>.branch stable
+
+More -
+https://git-scm.com/book/en/v2/Git-Tools-Submodules
