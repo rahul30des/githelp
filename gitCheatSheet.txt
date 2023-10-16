@@ -298,5 +298,7 @@ Git sobmodule update --remote <branch>
 // Update Repo settings to fetch and merge from a different branch
 Git config -f .gitmodules submodule.<submodule>.branch stable
 
+git config --global status.showUntrackedFiles no
+
 More -
 https://git-scm.com/book/en/v2/Git-Tools-Submodules
